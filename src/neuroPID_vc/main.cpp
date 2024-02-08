@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <io.h>
 #include <iostream>
+#include <windows.h>
 
 
 bool g_is_start = false;
@@ -389,7 +390,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         20,             // Button height
         hWnd,           // Parent window
         (HMENU)10100,   // No menu.
-        (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE), 
+        (HINSTANCE)GetWindowLong(hWnd, GWLP_HINSTANCE), 
         NULL);          // Pointer not needed.
 
     if (!hwnd_start)
@@ -416,7 +417,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         20,             // Button height
         hWnd,           // Parent window
         (HMENU)10000,   // No menu.
-        (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE), 
+        (HINSTANCE)GetWindowLong(hWnd, GWLP_HINSTANCE), 
         NULL);          // Pointer not needed.
     
     if (!hwnd_k1_edit)
@@ -438,7 +439,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         20,             // Button height
         hWnd,           // Parent window
         (HMENU)10000,   // No menu.
-        (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE), 
+        (HINSTANCE)GetWindowLong(hWnd, GWLP_HINSTANCE), 
         NULL);          // Pointer not needed.
 
     //Use learning label.
@@ -452,7 +453,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         20,             // Button height
         hWnd,           // Parent window
         (HMENU)0,       // No menu.
-        (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE), 
+        (HINSTANCE)GetWindowLong(hWnd, GWLP_HINSTANCE), 
         NULL);          // Pointer not needed.
 
     //Use learning checkbox.
@@ -466,7 +467,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         20,             // Button height
         hWnd,           // Parent window
         (HMENU)10001,   // ID.
-        (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE), 
+        (HINSTANCE)GetWindowLong(hWnd, GWLP_HINSTANCE), 
         NULL);          // Pointer not needed.
 
     Button_SetCheck( hwnd_MLP_learn_check_box, BST_CHECKED );
@@ -482,7 +483,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         20,             // Button height
         hWnd,           // Parent window
         (HMENU)10010,   // No menu.
-        (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE), 
+        (HINSTANCE)GetWindowLong(hWnd, GWLP_HINSTANCE), 
         NULL);          // Pointer not needed.
 
     if (!hwnd_k1_edit)
@@ -493,7 +494,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     DefEditProc2 = (WNDPROC)GetWindowLongPtr(hwnd_z_edit,GWLP_WNDPROC);
     SetWindowLongPtr(hwnd_z_edit,GWLP_WNDPROC,(LPARAM)NewEditProc2);
 
-    //z label.
+    //z label.  
     HWND hwnd_z_label = CreateWindow(        
         L"Static",        // Predefined class; Unicode assumed 
         L"z",         // Button text 
@@ -504,7 +505,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         20,             // Button height
         hWnd,           // Parent window
         (HMENU)10011,   // No menu.
-        (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE), 
+        (HINSTANCE)GetWindowLong(hWnd, GWLP_HINSTANCE), 
         NULL);          // Pointer not needed.
 
     ShowWindow(hWnd, nCmdShow);
