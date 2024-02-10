@@ -29,14 +29,14 @@ int _tmain(int argc, _TCHAR* argv[])
 
     //2.2 Загружаем данные.
     stored_sample *s_data_tuner = new stored_sample();
-    s_data_tuner->load_from_file( "..\\PID_tuner_learning.data" );
+    s_data_tuner->load_from_file( "..\\data\\PID_tuner_learning.data" );
 
     s_data_tuner->create_learn_sample( 2 * INPUTS_COUNT, 35, 1, 2, 3, true );
-    s_data_tuner->save_to_file( "..\\aa1.txt" );
+    s_data_tuner->save_to_file( "..\\data\\aa1.txt" );
 
     tuner->init_weights();
     tuner->static_learn( 0.00000005f, s_data_tuner, 100000 );
-    tuner->save_to_file( "..\\tuner_q.data" );
+    tuner->save_to_file( "..\\data\\tuner_q.data" );
     return 0;  
     }
 
