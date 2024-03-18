@@ -1,0 +1,46 @@
+{
+	"version": 2,
+	"cmakeMinimumRequired": {
+		"major": 3,
+		"minor": 20,
+		"patch": 0
+	},
+	"configurePresets": [
+		{
+			"name": "windows-VS2022-default",
+			"displayName": "Visual Studio Community 2022 - x86 Release",
+			"description": "Using compilers for Visual Studio 17 2022 (x86 architecture)",
+			"generator": "Visual Studio 17 2022",
+			"toolset": "host=x86",
+			"architecture": "win32",
+			"binaryDir": "${sourceDir}/bin/build/${presetName}",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release",
+				"CMAKE_INSTALL_PREFIX": "${sourceDir}/bin/install/windows-default"
+			}
+		},
+		{
+			"name": "windows-VS2022-debug",
+			"displayName": "Visual Studio Community 2022 - x86 Debug",
+			"description": "Using compilers for Visual Studio 17 2022 (x86 architecture)",
+			"inherits": "windows-VS2022-default",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			}
+		}
+	],
+		"buildPresets" : [
+			{
+				"name": "build-windows-VS2022-release",
+				"displayName": "Windows Release",
+				"configurePreset": "windows-VS2022-default",
+				"configuration": "Release"
+			},
+			{
+				"name": "build-windows-VS2022-debug",
+				"displayName": "Windows Debug",
+				"configurePreset": "windows-VS2022-debug",
+				"configuration": "Debug"
+			}
+		]
+}
