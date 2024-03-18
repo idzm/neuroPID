@@ -252,15 +252,14 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     LoadString(hInstance, IDC_NEUROPID, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
+    init( 0 );
+    nn_emul_manager = new nn_manager( 100, 10 );
+
     // Perform application initialization:
     if (!InitInstance (hInstance, nCmdShow))
         {
         return FALSE;
         }
-
-    init( 0 );
-
-    nn_emul_manager = new nn_manager( 100, 10 );
 
     hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_NEUROPID));
 
@@ -408,7 +407,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 
     //k1
-    int k = nn_emul_manager.get_plant()->get_k1();
+    int k = nn_emul_manager->get_plant()->get_k1();
     wchar_t str[ 10 ];        
     _itow( k, str, 10 );
     
