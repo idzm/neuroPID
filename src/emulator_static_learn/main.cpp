@@ -5,7 +5,7 @@
 
 #include "sample.h"
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
     {
     const int INPUTS_COUNT = 10;
 

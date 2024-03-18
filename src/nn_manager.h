@@ -107,10 +107,11 @@ class nn_manager
                 "p\ti\td\n" );
 
             nn2_emulator->init_weights();
-            nn2_emulator->load_from_file( "..\\emul_q.data" );
+            nn2_emulator->load_from_file( "..\\data\\emul_q.data" );
 
             nn1_tuner->init_weights();
-            nn1_tuner->load_from_file( "..\\tuner_q.data" );
+            nn1_tuner->load_from_file( "..\\data\\tuner_q.data" );
+
             try
                 {
                 emul_sample = new rt_sample( 50, 20, 2, 1, 1, 120 );
@@ -124,7 +125,7 @@ class nn_manager
             catch ( char *ex )
                 {
                 printf( "%s\n", ex );
-                }  
+                }
             }
 
         plant* get_plant() const
