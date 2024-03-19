@@ -92,22 +92,22 @@ nn_manager::nn_manager(int time_interval,
         printf("%s\n", ex);
     }
 }
-
+//------------------------------------------------------------------------------
 plant* nn_manager::get_plant() const
 {
     return p_plant;
 }
-
+//------------------------------------------------------------------------------
 PID* nn_manager::get_PID() const
 {
     return p_pid;
 }
-
+//------------------------------------------------------------------------------
 void nn_manager::set_learning(bool use_learning)
 {
     this->use_learning = use_learning;
 }
-
+//------------------------------------------------------------------------------
 void nn_manager::eval()
 {
     //Получаем текущее значение объекта управления [1]. Получаем новое 
@@ -218,21 +218,22 @@ void nn_manager::eval()
     }
 #endif // USE_LEARNING
 }
-
+//------------------------------------------------------------------------------
 std::vector<float>* nn_manager::get_plant_data()
 {
     return p_plant_data;
 }
-
+//------------------------------------------------------------------------------
 std::vector<float>* nn_manager::get_PID_data()
 {
     return PID_data;
 }
-
+//------------------------------------------------------------------------------
 std::vector<float>* nn_manager::get_nn2_emul_data()
 {
     return nn2_out;
 }
+//------------------------------------------------------------------------------
 nn_manager::~nn_manager()
 {
     fclose(data_stream);
