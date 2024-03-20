@@ -172,228 +172,51 @@ class rt_sample: public i_learn_samples
         /// <param name="out_size">Количество выходов.</param>
         /// <param name="out_var_count">Количество выходных переменных.</param>
         /// <param name="max_var_value">Максимальное значение переменных, для масштабирования значения в интервале [0; 1].</param>        
-        rt_sample( int samples_cnt, int in_size, int in_var_count,
-            int out_size, int out_var_count, int max_var_value ) throw (...) :
-        i_learn_samples( samples_cnt, in_size, out_size ),
-            max_var_value ( max_var_value ),
-            in_var_count( in_var_count ),
-            out_var_count( out_var_count )
-            {     
-            if ( in_size % in_var_count )
-                {
-                char msg[ 200 ];
-                _snprintf( msg, sizeof( msg ),
-                    "rt_sample::rt_sample() - ошибка: число входов (%d) должно "
-                    "быть кратно числу переменных (%d).",
-                    in_size, in_var_count );
-
-                throw msg;
-                }
-            if ( out_size % out_var_count )
-                {
-                char msg[ 200 ];
-                _snprintf( msg, sizeof( msg ),
-                    "rt_sample::rt_sample() - ошибка: число выходов (%d) должно "
-                    "быть кратно числу переменных (%d).",
-                    out_size, out_var_count );
-
-                throw msg;
-                }
-
-            x = new float*[ samples_cnt ];
-            for ( int i = 0; i < samples_cnt; i++ )
-                {
-                x[ i ] = new float[ in_size ];
-                }
-
-            y = new float*[ samples_cnt ];
-            for ( int i = 0; i < samples_cnt; i++ )
-                {
-                y[ i ] = new float[ out_size ];
-                }
-
-            for ( int i = 0; i < samples_cnt; i++ )
-                {
-                for ( int j = 0; j < inputs_cnt; j++ )
-                    {
-                    x[ i ][ j ] = 0;
-                    }                
-                }
-
-            for ( int i = 0; i < samples_cnt; i++ )
-                {
-                for ( int j = 0; j < outputs_cnt; j++ )
-                    {
-                    y[ i ][ j ] = 0;
-                    }                
-                }
-
-            fake_image = new float[ out_size > in_size ? out_size : in_size ];
-            }
+        rt_sample(int samples_cnt, int in_size, int in_var_count,
+            int out_size, int out_var_count, int max_var_value);
 
         /// <summary>
         /// Получение максимального значения переменных.
         /// </summary>
-        int get_max_var_value() const
-            {
-            return max_var_value;
-            }
-
+        int get_max_var_value() const;
+          
         /// <summary>
         /// Сдвиг перед добавлением нового образа.
         /// </summary>
-        void shift_images()
-            {
-            for ( int i = 0; i < samples_cnt - 1; i++ )
-                {
-                for ( int j = 0; j < inputs_cnt; j++ )
-                	{
-                    x[ i ][ j ] = x[ i + 1 ][ j ];
-                	}                
-                }
-
-            for ( int i = 0; i < samples_cnt - 1; i++ )
-                {
-                for ( int j = 0; j < outputs_cnt; j++ )
-                    {
-                    y[ i ][ j ] = y[ i + 1 ][ j ];
-                    }                
-                }
-            }
+        void shift_images();
 
         /// <summary>
         /// Добавление нового значения входной переменной.
         /// </summary>
-        void add_new_val_to_in_image( int var_n, float val )
-            {
-            static int var_total_size = inputs_cnt / in_var_count;
-
-            int start_idx = var_n * var_total_size;
-            int finish_idx = start_idx + var_total_size - 1;
-
-            if ( start_idx >= inputs_cnt )
-            	{
-#ifdef _DEBUG
-                printf( "rt_sample::add_new_val_to_in_image(...) - "
-                    "ошибка: выход за диапазон (%d).",
-                    var_n );
-#endif // _DEBUG
-            	}
-
-            for ( int i = start_idx; i < finish_idx; i++ )
-            	{
-                x[ samples_cnt - 1 ][ i ] = x[ samples_cnt - 1 ][ i + 1 ];
-            	}
-            
-            x[ samples_cnt - 1 ][ finish_idx ] = val /*/ max_var_value*/;
-            }
+        void add_new_val_to_in_image(int var_n, float val);
 
         /// <summary>
         /// Добавление нового значения выходной переменной.
         /// </summary>
-        void add_new_val_to_out_image( int var_n, float val )
-            {
-            static int var_total_size = outputs_cnt / out_var_count;
-
-            int start_idx = var_n * var_total_size;
-            int finish_idx = start_idx + var_total_size - 1;
-
-            if ( start_idx >= inputs_cnt )
-                {
-#ifdef _DEBUG
-                printf( "rt_sample::add_new_val_to_in_image(...) - "
-                    "ошибка: выход за диапазон (%d).",
-                    var_n );
-#endif // _DEBUG
-                }
-            
-            for ( int i = start_idx; i < finish_idx; i++ )
-                {
-                y[ samples_cnt - 1 ][ i ] = y[ samples_cnt - 1 ][ i + 1 ];
-                }
-
-            y[ samples_cnt - 1 ][ finish_idx ] = val/* / max_var_value*/;
-            }
-
+        void add_new_val_to_out_image(int var_n, float val);
+         
         /// <summary>
         /// Получение входного образа с заданным номером.
         /// </summary>
         /// <param name="index">Номер образа (с нуля).</param>
         /// <returns>Образ с заданным номером или заглушку при ошибке.</returns>
-        float* get_sample_x( int index ) const
-            {
-            if ( index < samples_cnt && index >= 0 )
-                {
-                return x[ index ];
-                }
-            else
-                {
-                char msg[ 200 ];
-                _snprintf( msg, sizeof( msg ),
-                    "rt_sample::get_sample_x(...) - ошибка: индекс (%d) должен"
-                    " быть меньше числа образов (%d).",
-                    index, samples_cnt );
-
-                //throw msg;
-                }
-
-            return fake_image;
-            }
+        float* get_sample_x(int index) const;
 
         /// <summary>
         /// Получение последнего входного образа.
         /// </summary>
         /// <returns>Последний образ.</returns>
-        float* get_last_sample_x() const
-            {
-            return x[ samples_cnt - 1 ];
-            }
-
+        float* get_last_sample_x() const;
+          
         /// <summary>
         /// Получение выходного образа с заданным номером.
         /// </summary>
         /// <param name="index">Номер образа (с нуля).</param>
         /// <returns>Образ с заданным номером или заглушку при ошибке.</returns>
-        float* get_sample_y( int index ) const
-            {
-            if ( index < samples_cnt && index >= 0 )
-                {
-                return y[ index ];
-                }
-            else
-                {
-                char msg[ 200 ];
-                _snprintf( msg, sizeof( msg ),
-                    "rt_sample::get_sample_x(...) - ошибка: индекс (%d) должен "
-                    "быть меньше числа образов (%d).",
-                    index, samples_cnt );
+        float* get_sample_y(int index) const;
 
-                //throw msg;
-                }
-
-            return fake_image;
-            }
-
-        void print()
-            {
-            for ( int i = 0; i < samples_cnt; i++ )
-                {
-                printf( "%3d: [", i );
-                for ( int j = 0; j < inputs_cnt; j++ )
-                    {
-                    printf( "%.2f ", x[ i ][ j ] );
-                    }
-                printf( "] -> [" );
-
-                for ( int j = 0; j < outputs_cnt; j++ )
-                    {
-                    printf( "%.2f ", y[ i ][ j ] );
-                    }     
-                printf( "]\n" );
-                }   
-            printf( "\n");
-            }
-
+        void print();
+           
     private:     
         int in_var_count;
         int out_var_count;

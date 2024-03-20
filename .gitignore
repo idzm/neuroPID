@@ -2,6 +2,8 @@
 out/
 .idea/
 bin/
+src/RCa20032
+
 # Qt-es
 object_script.*.Release
 object_script.*.Debug
@@ -44,3 +46,5 @@ compile_commands.json
 *creator.user*
 
 *_qmlcache.qrc
+
+
