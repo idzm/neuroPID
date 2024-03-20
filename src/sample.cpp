@@ -268,3 +268,198 @@ int stored_sample::get_column_window_size() const
     }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+rt_sample::rt_sample(int samples_cnt, int in_size, int in_var_count,
+    int out_size, int out_var_count, int max_var_value) throw (...) :
+    i_learn_samples(samples_cnt, in_size, out_size),
+    max_var_value(max_var_value),
+    in_var_count(in_var_count),
+    out_var_count(out_var_count)
+{
+    if (in_size % in_var_count)
+    {
+        char msg[200];
+        _snprintf(msg, sizeof(msg),
+            "rt_sample::rt_sample() - ошибка: число входов (%d) должно "
+            "быть кратно числу переменных (%d).",
+            in_size, in_var_count);
+
+        throw msg;
+    }
+    if (out_size % out_var_count)
+    {
+        char msg[200];
+        _snprintf(msg, sizeof(msg),
+            "rt_sample::rt_sample() - ошибка: число выходов (%d) должно "
+            "быть кратно числу переменных (%d).",
+            out_size, out_var_count);
+
+        throw msg;
+    }
+
+    x = new float* [samples_cnt];
+    for (int i = 0; i < samples_cnt; i++)
+    {
+        x[i] = new float[in_size];
+    }
+
+    y = new float* [samples_cnt];
+    for (int i = 0; i < samples_cnt; i++)
+    {
+        y[i] = new float[out_size];
+    }
+
+    for (int i = 0; i < samples_cnt; i++)
+    {
+        for (int j = 0; j < inputs_cnt; j++)
+        {
+            x[i][j] = 0;
+        }
+    }
+
+    for (int i = 0; i < samples_cnt; i++)
+    {
+        for (int j = 0; j < outputs_cnt; j++)
+        {
+            y[i][j] = 0;
+        }
+    }
+
+    fake_image = new float[out_size > in_size ? out_size : in_size];
+}
+//------------------------------------------------------------------------------
+int rt_sample::get_max_var_value() const
+{
+    return max_var_value;
+}
+//------------------------------------------------------------------------------
+void rt_sample::shift_images()
+{
+    for (int i = 0; i < samples_cnt - 1; i++)
+    {
+        for (int j = 0; j < inputs_cnt; j++)
+        {
+            x[i][j] = x[i + 1][j];
+        }
+    }
+
+    for (int i = 0; i < samples_cnt - 1; i++)
+    {
+        for (int j = 0; j < outputs_cnt; j++)
+        {
+            y[i][j] = y[i + 1][j];
+        }
+    }
+}
+//------------------------------------------------------------------------------
+void rt_sample::add_new_val_to_in_image(int var_n, float val)
+{
+    static int var_total_size = inputs_cnt / in_var_count;
+
+    int start_idx = var_n * var_total_size;
+    int finish_idx = start_idx + var_total_size - 1;
+
+    if (start_idx >= inputs_cnt)
+    {
+#ifdef _DEBUG
+        printf("rt_sample::add_new_val_to_in_image(...) - "
+            "ошибка: выход за диапазон (%d).",
+            var_n);
+#endif // _DEBUG
+    }
+
+    for (int i = start_idx; i < finish_idx; i++)
+    {
+        x[samples_cnt - 1][i] = x[samples_cnt - 1][i + 1];
+    }
+
+    x[samples_cnt - 1][finish_idx] = val /*/ max_var_value*/;
+}
+//------------------------------------------------------------------------------
+void rt_sample::add_new_val_to_out_image(int var_n, float val)
+{
+    static int var_total_size = outputs_cnt / out_var_count;
+
+    int start_idx = var_n * var_total_size;
+    int finish_idx = start_idx + var_total_size - 1;
+
+    if (start_idx >= inputs_cnt)
+    {
+#ifdef _DEBUG
+        printf("rt_sample::add_new_val_to_in_image(...) - "
+            "ошибка: выход за диапазон (%d).",
+            var_n);
+#endif // _DEBUG
+    }
+
+    for (int i = start_idx; i < finish_idx; i++)
+    {
+        y[samples_cnt - 1][i] = y[samples_cnt - 1][i + 1];
+    }
+
+    y[samples_cnt - 1][finish_idx] = val/* / max_var_value*/;
+}
+//------------------------------------------------------------------------------
+float* rt_sample::get_sample_x(int index) const
+{
+    if (index < samples_cnt && index >= 0)
+    {
+        return x[index];
+    }
+    else
+    {
+        char msg[200];
+        _snprintf(msg, sizeof(msg),
+            "rt_sample::get_sample_x(...) - ошибка: индекс (%d) должен"
+            " быть меньше числа образов (%d).",
+            index, samples_cnt);
+
+        //throw msg;
+    }
+
+    return fake_image;
+}
+//------------------------------------------------------------------------------
+float* rt_sample::get_last_sample_x() const
+{
+    return x[samples_cnt - 1];
+}
+//------------------------------------------------------------------------------
+float* rt_sample::get_sample_y(int index) const
+{
+    if (index < samples_cnt && index >= 0)
+    {
+        return y[index];
+    }
+    else
+    {
+        char msg[200];
+        _snprintf(msg, sizeof(msg),
+            "rt_sample::get_sample_x(...) - ошибка: индекс (%d) должен "
+            "быть меньше числа образов (%d).",
+            index, samples_cnt);
+
+        //throw msg;
+    }
+
+    return fake_image;
+}
+//------------------------------------------------------------------------------
+void  rt_sample::print()
+{
+    for (int i = 0; i < samples_cnt; i++)
+    {
+        printf("%3d: [", i);
+        for (int j = 0; j < inputs_cnt; j++)
+        {
+            printf("%.2f ", x[i][j]);
+        }
+        printf("] -> [");
+
+        for (int j = 0; j < outputs_cnt; j++)
+        {
+            printf("%.2f ", y[i][j]);
+        }
+        printf("]\n");
+    }
+    printf("\n");
+}
