@@ -14,9 +14,7 @@ K( 525.f ), T( .450f ), h( h ), z( z ), k1( 1 ), U( U )
 float plant::get_new_out( float control_value )
     {
     control_value = U * control_value / 100;
-
     float k = K;
-
     float g = exp( -h / T );
     float A = k / ( 2 * h * h ) * ( ( 1 - g ) * ( 2 * T * T - T * h ) + 2 * h * h - 2 * T * h );
     float B = -k / ( h * h ) * ( ( 1 - g ) * ( 2 * T * T - h * h ) + h * h - 2 * T * h );
@@ -24,7 +22,7 @@ float plant::get_new_out( float control_value )
 
     //A = 2;
    //B = 1;
-   //C = 1;
+    //C = 1;
 
     //Сдвиг управляющих сигналов.
     for ( int i = z + Z - 1; i > 0; i-- )
@@ -62,6 +60,7 @@ float plant::get_current_control_v() const
     {
     return 100 * prev_control[ 0 ] / U;
     }
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void plant::set_k1( float new_k1 )
     {
