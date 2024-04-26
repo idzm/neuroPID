@@ -1,9 +1,9 @@
 #include "plant.h"
 
 //------------------------------------------------------------------------------
-plant::plant( float h = 1, int z = 3, float U = 0.5 ) :previous_obj_v1( 10 ),
-current_obj_v( 10 ),
-K( 525.f ), T( .450f ), h( h ), z( z ), k1( 1 ), U( U )
+plant::plant( float h = 1, int z = 3, float U = 0.5 ):previous_obj_v1( 10 ),
+      current_obj_v( 10 ),
+    K( 525.f ), T( .450f ), h( h ), z( z ), k1( 1 ), U( U )
     {
     for ( int i = 0; i < z + Z; i++ )
         {
