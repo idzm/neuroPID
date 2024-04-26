@@ -30,12 +30,12 @@ float plant::get_new_out( float control_value )
     for ( int i = z + Z - 1; i > 0; i-- )
         {
         prev_control[ i ] = prev_control[ i - 1 ];
-        }
+        } 
     prev_control[ 0 ] = control_value;
 
     float res = A * prev_control[ z ] + B * prev_control[ z + 1 ] +
         C * prev_control[ z + 2 ];
-    res += k1 * g * previous_obj_v1;
+    res += k1 * g * previous_obj_v1; 
 
 
     if ( res < 0 )
@@ -48,7 +48,7 @@ float plant::get_new_out( float control_value )
         }
 
     previous_obj_v1 = current_obj_v;
-    current_obj_v = res;
+    current_obj_v = res;    
 
     return res;
     }
