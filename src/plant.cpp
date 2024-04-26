@@ -27,7 +27,7 @@ float plant::get_new_out( float control_value )
     //C = 1;
 
     //Сдвиг управляющих сигналов.
-    for ( int i = z + Z - 1; i > 0; i-- )
+        for ( int i = z + Z - 1; i > 0; i-- )
         {
         prev_control[ i ] = prev_control[ i - 1 ];
         } 
@@ -48,7 +48,7 @@ float plant::get_new_out( float control_value )
         }
 
     previous_obj_v1 = current_obj_v;
-    current_obj_v = res;    
+    current_obj_v = res;
 
     return res;
     }
