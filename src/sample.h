@@ -172,8 +172,8 @@ class rt_sample: public i_learn_samples
         /// <param name="out_size">Количество выходов.</param>
         /// <param name="out_var_count">Количество выходных переменных.</param>
         /// <param name="max_var_value">Максимальное значение переменных, для масштабирования значения в интервале [0; 1].</param>        
-        rt_sample(int samples_cnt, int in_size, int in_var_count,
-            int out_size, int out_var_count, int max_var_value);
+        rt_sample( int samples_cnt, int in_size, int in_var_count,
+            int out_size, int out_var_count, int max_var_value );
 
         /// <summary>
         /// Получение максимального значения переменных.
@@ -188,19 +188,19 @@ class rt_sample: public i_learn_samples
         /// <summary>
         /// Добавление нового значения входной переменной.
         /// </summary>
-        void add_new_val_to_in_image(int var_n, float val);
+        void add_new_val_to_in_image( int var_n, float val );
 
         /// <summary>
         /// Добавление нового значения выходной переменной.
         /// </summary>
-        void add_new_val_to_out_image(int var_n, float val);
+        void add_new_val_to_out_image( int var_n, float val );
          
         /// <summary>
         /// Получение входного образа с заданным номером.
         /// </summary>
         /// <param name="index">Номер образа (с нуля).</param>
         /// <returns>Образ с заданным номером или заглушку при ошибке.</returns>
-        float* get_sample_x(int index) const;
+        float *get_sample_x( int index ) const;
 
         /// <summary>
         /// Получение последнего входного образа.
@@ -213,7 +213,7 @@ class rt_sample: public i_learn_samples
         /// </summary>
         /// <param name="index">Номер образа (с нуля).</param>
         /// <returns>Образ с заданным номером или заглушку при ошибке.</returns>
-        float* get_sample_y(int index) const;
+        float *get_sample_y( int index ) const;
 
         void print();
            
