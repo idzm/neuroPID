@@ -1,17 +1,14 @@
-#include "stdafx.h"
-
 #include "plant.h"
 
-#include <math.h>
 //------------------------------------------------------------------------------
 plant::plant( float h = 1, int z = 3, float U = 0.5 ):previous_obj_v1( 10 ),
       current_obj_v( 10 ),
     K( 525.f ), T( .450f ), h( h ), z( z ), k1( 1 ), U( U )
     {
     for ( int i = 0; i < z + Z; i++ )
-    	{
+        {
         prev_control.push_back( 0 );
-    	}
+        }
     }
 //------------------------------------------------------------------------------
 float plant::get_new_out( float control_value )
@@ -39,7 +36,7 @@ float plant::get_new_out( float control_value )
     float res = A * prev_control[ z ] + B * prev_control[ z + 1 ] +
         C * prev_control[ z + 2 ];
     res += k1 * g * previous_obj_v1; 
-       
+
 
     if ( res < 0 )
         {
@@ -51,7 +48,7 @@ float plant::get_new_out( float control_value )
         }
 
     previous_obj_v1 = current_obj_v;
-    current_obj_v = res;   
+    current_obj_v = res;
 
     return res;
     }
@@ -66,3 +63,22 @@ float plant::get_current_control_v() const
     return 100 * prev_control[ 0 ] / U;
     }
 //-----------------------------------------------------------------------------
+void plant::set_k1( float new_k1 )
+    {
+    k1 = new_k1;
+    }
+//------------------------------------------------------------------------------
+float plant::get_k1() const
+    {
+    return k1;
+    }
+//------------------------------------------------------------------------------
+void plant::set_T( float new_T )
+    {
+    T = new_T;
+    }
+//------------------------------------------------------------------------------
+float plant::get_T() const
+    {
+    return T;
+    }
